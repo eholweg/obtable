@@ -81,6 +81,7 @@ import urllib
 import re
 import pytz
 import datetime
+from AppT import *
 
 dtgPat = '\w\w\w\s\d{1,2},\s\d\d\d\d\s-\s(.*)\w\w\w\s/\s.*'
 wndPat = 'Wind:(.*):.*'
@@ -109,17 +110,15 @@ def getlocaltimezone(utc_dt):
 
 localTZ = getlocaltimezone(datetime.datetime.utcnow())
 
-
-
-obtable='<style type="text/css">'+ "\n"
-obtable+='<!--'+ "\n"
-obtable+='.obtab { font-size: 10px; font-family: Arial,Helvetica,san-serif; text-align:center; }'+ "\n"
-obtable+='.obtableft { font-size: 10px; text-align:left; font-family: Arial,Helvetica,san-serif; }'+ "\n"
-obtable+='.wht { background-color:#FFF; text-align:center; }'+ "\n"
-obtable+='.color { background-color:#EEE; text-align:center; }'+ "\n"
-obtable+='.tabbg { background-color: #202cb8; font-size: 120%; }'+ "\n"
-obtable+='-->'+ "\n"
-obtable+='</style>'+ "\n"
+obtable = '<style type="text/css">' + "\n"
+obtable += '<!--' + "\n"
+obtable += '.obtab { font-size: 10px; font-family: Arial,Helvetica,san-serif; text-align:center; }' + "\n"
+obtable += '.obtableft { font-size: 10px; text-align:left; font-family: Arial,Helvetica,san-serif; }' + "\n"
+obtable += '.wht { background-color:#FFF; text-align:center; }' + "\n"
+obtable += '.color { background-color:#EEE; text-align:center; }' + "\n"
+obtable += '.tabbg { background-color: #202cb8; font-size: 120%; }' + "\n"
+obtable += '-->' + "\n"
+obtable += '</style>' + "\n"
 
 obtable += '<table border="0" cellpadding="0" cellspacing="0" width="90%">' + "\n"
 obtable += '<tr><td bgcolor="#202CB8"><span style="color: #FFFFFF; font-weight: bold">&nbsp;Current Weather Observations... </span></td></tr>' + "\n"
@@ -135,7 +134,7 @@ obtable += '<td class="obtab">Vsby.<br>(SM)</td>' + "\n"
 obtable += '<td class="obtab">Temp.<br>(&ordm;F)</td>' + "\n"
 obtable += '<td class="obtab">Dewpt.<br>(&ordm;F)</td>' + "\n"
 obtable += '<td class="obtab">Hum.<br>(%)</td>' + "\n"
-obtable += '<td class="obtab">Wind<br>(mph)</td><td class="obtab">Wind<br>Chill (&ordm;F)</td><td class="obtab">Pres.<br>(in)</td></tr>' + "\n"
+obtable += '<td class="obtab">Wind<br>(mph)</td><td class="obtab">Wind Chill / Heat Index<br>(&ordm;F)</td><td class="obtab">Pres.<br>(in)</td></tr>' + "\n"
 
 sites = dict([('KVJI', 'Abingdon VA'),
               ('KRHP', 'Andrews-Murphy NC'),
@@ -150,17 +149,20 @@ sites = dict([('KVJI', 'Abingdon VA'),
               ('KTRI', 'Tri-Cities TN'),
               ('KEKQ', 'Wayne Cnty KY'),
               ('KLNP', 'Wise VA'),
+              #('KFAR', 'Fargo ND'),
               ])
-
 row = 0
+# CAN USE stations IN PLACE OF decoded IF YOU WANT TO GET JUST THE RAW OBSERVATION
+obLink = 'http://tgftp.nws.noaa.gov/data/observations/metar/decoded/'
+obHistory='http://w1.weather.gov/data/obhistory/'
 
 for id, name in sites.items():
     # CAN USE stations IN PLACE OF decoded IF YOU WANT TO GET JUST THE RAW OBSERVATION
-    link = "http://tgftp.nws.noaa.gov/data/observations/metar/decoded/" + id + ".TXT"
+    link = obLink + id + ".TXT"
     observation = urllib.urlopen(link).read(10000)
     observation = observation.split("\n")
 
-    href = 'http://w1.weather.gov/data/obhistory/' + id + '.html'
+    href = obHistory + id + '.html'
 
     for line in observation:
         matchdtg = re.match(dtgPat, line)
@@ -172,22 +174,41 @@ for id, name in sites.items():
         matchwnd = re.match(wndPat, line)
         if matchwnd:
             wind = matchwnd.group(1).strip()
-            print wind
-            #Have root wind... now need to break it out and format
-            #Calm will not need to be further extracted
-
-            #from pattern
-            #With GUSTS    from\sthe\s(\w+)\s.*at\s(\d+)\s.*gusting.*(\d+).*
-            wndFrmPat = 'from\sthe\s(\w+)\s.*at(\d+)\sMPH.*'
-            matchFrmWnd = re.match(wndFrmPat, wind)
-            if matchFrmWnd:
-                wind = matchFrmWnd.group(1)+' '+ matchFrmWnd.group(2)
-
-            #Variable pattern
-            wndVarPat = 'Variable\sat\s(\d+).*'
-            matchVarWnd = re.match(wndVarPat, wind)
-            if matchVarWnd:
-                wind='Vrbl '+matchVarWnd.group(1)
+            #print wind
+            wndSpd = '0'
+            # Have root wind... now need to break it out and format
+            # Calm will not need to be further extracted
+            if wind == 'Calm':
+                wind = "CALM"
+                wndSpd = 0
+            elif wind == 'Vrbl':
+                print("Going into wind var")
+                wndVarPat = 'Variable\sat\s(\d+).*'
+                matchVarWnd = re.match(wndVarPat, wind)
+                if matchVarWnd:
+                    wind = 'Vrbl ' + matchVarWnd.group(1)
+                    wndSpd = matchVarWnd.group(1)
+                else:
+                    wnd = 'NA'
+                    wndSpd = '0'
+            else:
+                wndFrmGustPat = 'from\sthe\s(\w+)\s.*at\s(\d+)\s.*gusting\sto.*\s(\d+)\sMPH.*'
+                matchFrmGustWnd = re.match(wndFrmGustPat, wind)
+                if matchFrmGustWnd:
+                    wind = matchFrmGustWnd.group(1) + ' ' + matchFrmGustWnd.group(2) + 'G' + matchFrmGustWnd.group(3)
+                    wndSpd=matchFrmGustWnd.group(2)
+                else:
+                    # NO GUST INFO IS AVAILABLE
+                    wndFrmPat = 'from\sthe\s(\w+)\s.*at\s(\d+)\sMPH.*'
+                    matchFrmWnd = re.match(wndFrmPat, wind)
+                    if matchFrmWnd:
+                        wind = matchFrmWnd.group(1) + ' ' + matchFrmWnd.group(2)
+                        wndSpd = matchFrmWnd.group(2)
+                    else:
+                        # CANNOT PARSE WIND DATA
+                        wind = 'NA'
+                        wndSpd = '0'
+            windSpeed=int(wndSpd)
 
         matchvis = re.match(visPat, line)
         if matchvis:
@@ -199,13 +220,14 @@ for id, name in sites.items():
 
         matchtmp = re.match(tmpPat, line)
         if matchtmp:
-            temp = int(round(float(matchtmp.group(1).strip())))
-            temp = str(temp)
+            appT_t=float(matchtmp.group(1))
+            temp = str(int(round(float(matchtmp.group(1)))))
 
         matchdew = re.match(dewPat, line)
         if matchdew:
-            dew = int(round(float(matchdew.group(1).strip())))
-            dew = str(dew)
+            print(matchdew.group(1))
+            appT_d=float(matchdew.group(1))
+            dew = str(int(round(float(matchdew.group(1)))))
 
         matchhum = re.match(humPat, line)
         if matchhum:
@@ -215,15 +237,26 @@ for id, name in sites.items():
         if matchpre:
             pres = matchpre.group(1).strip()
 
-        wcHI = 'NA'
-
     if (row % 2 == 0):
         obtable += '<tr class="wht">'
     else:
         obtable += '<tr class="color">'
 
-    row+=1
+    #Calculate Wind Chill or Heat Index
+    W=array([int(windSpeed)])
+    T=array([float(appT_t)])
+    TD=array([float(appT_d)])
 
+    apparentT = AppT(T, TD, W, T)
+    appTVal=int(round(apparentT[0],0))
+    if appTVal>90:
+        wcHI=str(appTVal) + " (hi)"
+    elif appTVal<45 and windSpeed>4:
+        wcHI=str(appTVal) + " (wc)"
+    else:
+        wcHI="(na)"
+
+    row += 1
     obtable += '<td class="obtableft"><a href="' + href + '">' + name + '</a></td>'
     obtable += '<td class="obtab">' + eventTime + '</td>'
     obtable += '<td class="obtableft">' + sky + '</td>'
@@ -236,120 +269,13 @@ for id, name in sites.items():
     obtable += '<td class="obtab">' + pres + '</td>'
     obtable += '</tr>' + "\n"
 
-
-
-
-# matchOb=re.match(obPattern, line)
-#
-# result = re.search(r'my name is (\S+)', line)
-#
-# if matchOb:
-#   code=line
-#   # Initialize a Metar object with the coded report
-#   obs = Metar.Metar(code)
-#
-#   print name
-#   print "-----------------------------------------------------------------------"
-#   print "METAR: ",code
-#   print "-----------------------------------------------------------------------"
-#
-#   if(row%2==0):
-#       obtable+='<tr class="wht">'
-#   else:
-#       obtable+='<tr class="color">'
-#
-#   eventTime=aslocaltimestr(obs.time)
-#   href='http://w1.weather.gov/data/obhistory/'+id+'.html'
-#   #vsby=obs.visibility()
-#  #print obs.temp
-#   #temp=int(round(obs.temp.string()))
-#   #dew=int(round(obs.dewpt.string()))
-#   #rh=int(round( (dew/temp) ))
-#   #wind=obs.wind_dir+' '+obs.wind_speed
-#   #wcHI='NA'
-#   #pres=obs.press_sea_level
-#
-#
-#   # Print the individual data
-#   # obtable+='<td class="obtableft"><a href="'+href+'">'+name+'</a></td>'
-#   # obtable+='<td class="obtab">'+eventTime+'</td>'
-#   # obtable+='<td class="obtableft">&nbsp;</td>'
-#   # obtable+='<td class="obtab">'+vsby+'</td>'
-#   # obtable+='<td class="obtab">'+temp+'</td>'
-#   # obtable+='<td class="obtab">'+dew+'</td>'
-#   # obtable+='<td class="obtab">'+rh+'</td>'
-#   # obtable+='<td class="obtableft">'+wind+'</td>'
-#   # obtable+='<td class="obtab">'+wcHI+'</td>'
-#   # obtable+='<td class="obtab">'+pres+'</td>'
-#   # obtable+='</tr>'
-#
-#   # The 'station_id' attribute is a string.
-#   print "station: %s" % obs.station_id
-#
-#   if obs.type:
-#     print "type: %s" % obs.report_type()
-#
-#   # The 'time' attribute is a datetime object
-#   if obs.time:
-#     print "time: %s" % obs.time.ctime()
-#
-#   # The 'temp' and 'dewpt' attributes are temperature objects
-#   if obs.temp:
-#     print "temperature: %s" % obs.temp.string("C")
-#
-#   if obs.dewpt:
-#     print "dew point: %s" % obs.dewpt.string("C")
-#
-#   # The wind() method returns a string describing wind observations
-#   # which may include speed, direction, variability and gusts.
-#   if obs.wind_speed:
-#     print "wind: %s" % obs.wind()
-#
-#   # The peak_wind() method returns a string describing the peak wind
-#   # speed and direction.
-#   if obs.wind_speed_peak:
-#     print "wind: %s" % obs.peak_wind()
-#
-#   # The visibility() method summarizes the visibility observation.
-#   if obs.vis:
-#     print "visibility: %s" % obs.visibility()
-#
-#   # The runway_visual_range() method summarizes the runway visibility
-#   # observations.
-#   if obs.runway:
-#     print "visual range: %s" % obs.runway_visual_range()
-#
-#   # The 'press' attribute is a pressure object.
-#   if obs.press:
-#     print "pressure: %s" % obs.press.string("mb")
-#
-#   # The 'precip_1hr' attribute is a precipitation object.
-#   if obs.precip_1hr:
-#     print "precipitation: %s" % obs.precip_1hr.string("in")
-#
-#   # The present_weather() method summarizes the weather description (rain, etc.)
-#   print "weather: %s" % obs.present_weather()
-#
-#   # The sky_conditions() method summarizes the cloud-cover observations.
-#   print "sky: %s" % obs.sky_conditions("\n     ")
-#
-#   # The remarks() method describes the remark groups that were parsed, but
-#   # are not available directly as Metar attributes.  The precipitation,
-#   # min/max temperature and peak wind remarks, for instance, are stored as
-#   # attributes and won't be listed here.
-#   if obs._remarks:
-#     print "remarks:"
-#     print "- "+obs.remarks("\n- ")
-#
-#   print "-----------------------------------------------------------------------\n"
-#
-
+# Finalize The Ob Table
 obtable += '</table>'
 obtable += '</td></tr></table>'
 obtable += '</td></tr></table>'
 
-# OUTPUT THE TABLE TO FILE
-print obtable
+# OUTPUT THE OB TABLE TO FILE
+# print obtable
 
 html = open('./obstable.html', 'w')
 html.write(obtable)
