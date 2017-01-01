@@ -31,18 +31,20 @@ def getlocaltimezone(utc_dt):
 
 localTZ = getlocaltimezone(datetime.datetime.utcnow())
 
-obtable = '<style type="text/css">' + "\n"
+obtable = '<div class="boxit">' + "\n"
+obtable += '<style type="text/css">' + "\n"
 obtable += '<!--' + "\n"
-obtable += '.obtab { font-size: 10px; font-family: Arial,Helvetica,san-serif; text-align:center; }' + "\n"
-obtable += '.obtableft { font-size: 10px; text-align:left; font-family: Arial,Helvetica,san-serif; }' + "\n"
+obtable += '.obtab { font-size: 90%; font-family: Arial,Helvetica,san-serif; text-align:center; }' + "\n"
+obtable += '.obtableft { font-size: 90%; text-align:left; font-family: Arial,Helvetica,san-serif; }' + "\n"
 obtable += '.wht { background-color:#FFF; text-align:center; }' + "\n"
 obtable += '.color { background-color:#EEE; text-align:center; }' + "\n"
-obtable += '.tabbg { background-color: #202cb8; font-size: 120%; }' + "\n"
+obtable += '.tabbg { background-color: #0071bc; font-size: 120%; }' + "\n"
+obtable += '.tabhdr { color: #FFFFFF; font-weight: bold; font-family: Arial,Helvetica,san-serif; }' + "\n"
 obtable += '-->' + "\n"
 obtable += '</style>' + "\n"
 
-obtable += '<table border="0" cellpadding="0" cellspacing="0" width="90%">' + "\n"
-obtable += '<tr><td bgcolor="#202CB8"><span style="color: #FFFFFF; font-weight: bold">&nbsp;Current Weather Observations... </span></td></tr>' + "\n"
+obtable += '<table border="0" cellpadding="0" cellspacing="0" width="100%">' + "\n"
+obtable += '<tr><td bgcolor="#0071bc"><span class="tabhdr">&nbsp;Current Weather Observations... </span></td></tr>' + "\n"
 obtable += '<tr><td>' + "\n"
 obtable += '<table border="0" cellpadding="0" cellspacing="0" width="100%">' + "\n"
 obtable += '<tr><td bgcolor="#202CB8">' + "\n"
@@ -197,6 +199,7 @@ for id, name in sites.items():
 obtable += '</table>'
 obtable += '</td></tr></table>'
 obtable += '</td></tr></table>'
+obtable += '</div>'
 
 # OUTPUT THE OB TABLE TO FILE
 # print obtable
