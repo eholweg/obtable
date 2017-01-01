@@ -11,7 +11,7 @@ skyPat = 'Sky.*:(.*)'
 tmpPat = 'Temp.*:(.*)F.*'
 dewPat = 'Dew.*:(.*)F.*'
 humPat = 'Relative.*:(.*)%'
-prePat = 'Press.*:(.*)\sin.*'
+prePat = 'Press.*altimeter.*:(.*)\sin.*'
 
 local_tz = pytz.timezone('America/New_York')
 
@@ -159,7 +159,9 @@ for id, name in sites.items():
 
         matchpre = re.match(prePat, line)
         if matchpre:
+            #print(line)
             pval=matchpre.group(1).strip()
+            #print(pval)
             if len(pval)<5:
                 pval=pval+"0"
             pres = pval
