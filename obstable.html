@@ -1,20 +1,21 @@
 <div class="boxit">
 <style type="text/css">
 <!--
-.obtab { font-size: 90%; font-family: Arial,Helvetica,san-serif; text-align:center; }
-.obtableft { font-size: 90%; text-align:left; font-family: Arial,Helvetica,san-serif; }
+.obtab { font-size: 90%; font-family: Arial,Helvetica,san-serif; text-align:center; padding:3px; }
+.obtableft { font-size: 90%; text-align:left; font-family: Arial,Helvetica,san-serif; padding-left:6px; }
+.obtabrght { font-size: 90%; text-align:right; font-family: Arial,Helvetica,san-serif; padding-right:6px; }
 .wht { background-color:#FFF; text-align:center; }
 .color { background-color:#EEE; text-align:center; }
 .tabbg { background-color: #0071bc; font-size: 120%; }
-.tabhdr { color: #FFFFFF; font-weight: bold; font-family: Arial,Helvetica,san-serif; }
+.tabhdr { color: #FFFFFF; font-weight: bold; font-family: Arial,Helvetica,san-serif; padding: 8px; }
 -->
 </style>
 <table border="0" cellpadding="0" cellspacing="0" width="100%">
-<tr><td bgcolor="#0071bc"><span class="tabhdr">&nbsp;Current Weather Observations... </span></td></tr>
+<tr><td bgcolor="#0071bc"><div class="title">&nbsp;Current Weather Observations... </div></td></tr>
 <tr><td>
 <table border="0" cellpadding="0" cellspacing="0" width="100%">
 <tr><td bgcolor="#202CB8">
-<table cellspacing="1" cellpadding="4" border="0" width="100%">
+<table cellspacing="0" cellpadding="4" border="1" width="100%">
 <tr bgcolor="#fff2d9">
 <td class="obtab">Location</td>
 <td class="obtab">Time<br>(EST)</td>
@@ -24,17 +25,17 @@
 <td class="obtab">Dewpt.<br>(&ordm;F)</td>
 <td class="obtab">Hum.<br>(%)</td>
 <td class="obtab">Wind<br>(mph)</td><td class="obtab">Wind Chill / Heat Index<br>(&ordm;F)</td><td class="obtab">Pres.<br>(in)</td></tr>
-<tr class="wht"><td class="obtableft"><a href="http://w1.weather.gov/data/obhistory/KVJI.html">Abingdon VA</a></td><td class="obtab">05:15</td><td class="obtableft">Overcast</td><td class="obtab">2 1/2</td><td class="obtab">39</td><td class="obtab">38</td><td class="obtab">97</td><td class="obtableft">CALM</td><td class="obtab">na</td><td class="obtab">30.07</td></tr>
-<tr class="color"><td class="obtableft"><a href="http://w1.weather.gov/data/obhistory/K1A6.html">Middlesboro KY</a></td><td class="obtab">05:15</td><td class="obtableft">Overcast</td><td class="obtab">10</td><td class="obtab">43</td><td class="obtab">42</td><td class="obtab">96</td><td class="obtableft">S 7</td><td class="obtab">38 [WC]</td><td class="obtab">30.07</td></tr>
-<tr class="wht"><td class="obtableft"><a href="http://w1.weather.gov/data/obhistory/KTYS.html">Knoxville TN</a></td><td class="obtab">04:53</td><td class="obtableft">Overcast</td><td class="obtab">2</td><td class="obtab">41</td><td class="obtab">39</td><td class="obtab">92</td><td class="obtableft">E 3</td><td class="obtab">na</td><td class="obtab">30.07</td></tr>
-<tr class="color"><td class="obtableft"><a href="http://w1.weather.gov/data/obhistory/KRHP.html">Andrews-Murphy NC</a></td><td class="obtab">04:55</td><td class="obtableft">Overcast</td><td class="obtab">2 1/2</td><td class="obtab">40</td><td class="obtab">40</td><td class="obtab">100</td><td class="obtableft">CALM</td><td class="obtab">na</td><td class="obtab">30.09</td></tr>
-<tr class="wht"><td class="obtableft"><a href="http://w1.weather.gov/data/obhistory/KDNN.html">Dalton GA</a></td><td class="obtab">05:15</td><td class="obtableft">Overcast</td><td class="obtab">4</td><td class="obtab">42</td><td class="obtab">42</td><td class="obtab">100</td><td class="obtableft">S 3</td><td class="obtab">na</td><td class="obtab">30.06</td></tr>
-<tr class="color"><td class="obtableft"><a href="http://w1.weather.gov/data/obhistory/KTRI.html">Tri-Cities TN</a></td><td class="obtab">05:17</td><td class="obtableft">Overcast</td><td class="obtab">1 1/2</td><td class="obtab">39</td><td class="obtab">38</td><td class="obtab">95</td><td class="obtableft">CALM</td><td class="obtab">na</td><td class="obtab">30.09</td></tr>
-<tr class="wht"><td class="obtableft"><a href="http://w1.weather.gov/data/obhistory/KJFZ.html">Tazewell Cnty VA</a></td><td class="obtab">05:15</td><td class="obtableft">Overcast</td><td class="obtab">1/2</td><td class="obtab">38</td><td class="obtab">38</td><td class="obtab">100</td><td class="obtableft">SSW 3</td><td class="obtab">na</td><td class="obtab">30.05</td></tr>
-<tr class="color"><td class="obtableft"><a href="http://w1.weather.gov/data/obhistory/KCSV.html">Crossville TN</a></td><td class="obtab">04:53</td><td class="obtableft">Overcast</td><td class="obtab">2</td><td class="obtab">40</td><td class="obtab">39</td><td class="obtab">96</td><td class="obtableft">NA</td><td class="obtab">na</td><td class="obtab">30.02</td></tr>
-<tr class="wht"><td class="obtableft"><a href="http://w1.weather.gov/data/obhistory/KCHA.html">Chattanooga TN</a></td><td class="obtab">04:53</td><td class="obtableft">Overcast</td><td class="obtab">6</td><td class="obtab">43</td><td class="obtab">41</td><td class="obtab">92</td><td class="obtableft">CALM</td><td class="obtab">na</td><td class="obtab">30.05</td></tr>
-<tr class="color"><td class="obtableft"><a href="http://w1.weather.gov/data/obhistory/KOQT.html">Oak Ridge TN</a></td><td class="obtab">05:04</td><td class="obtableft">Overcast</td><td class="obtab">1 3/4</td><td class="obtab">43</td><td class="obtab">41</td><td class="obtab">92</td><td class="obtableft">CALM</td><td class="obtab">na</td><td class="obtab">30.08</td></tr>
-<tr class="wht"><td class="obtableft"><a href="http://w1.weather.gov/data/obhistory/KEKQ.html">Wayne Cnty KY</a></td><td class="obtab">05:11</td><td class="obtableft">Overcast</td><td class="obtab">10</td><td class="obtab">42</td><td class="obtab">42</td><td class="obtab">100</td><td class="obtableft">NE 8</td><td class="obtab">36 [WC]</td><td class="obtab">30.06</td></tr>
-<tr class="color"><td class="obtableft"><a href="http://w1.weather.gov/data/obhistory/KMOR.html">Morristown TN</a></td><td class="obtab">05:15</td><td class="obtableft">Overcast</td><td class="obtab">1 3/4</td><td class="obtab">39</td><td class="obtab">39</td><td class="obtab">100</td><td class="obtableft">CALM</td><td class="obtab">na</td><td class="obtab">30.07</td></tr>
-<tr class="wht"><td class="obtableft"><a href="http://w1.weather.gov/data/obhistory/KLNP.html">Wise VA</a></td><td class="obtab">05:15</td><td class="obtableft">Overcast</td><td class="obtab">2 1/2</td><td class="obtab">41</td><td class="obtab">41</td><td class="obtab">100</td><td class="obtableft">SW 9</td><td class="obtab">35 [WC]</td><td class="obtab">30.05</td></tr>
+<tr class="wht"><td class="obtableft"><a href="http://w1.weather.gov/data/obhistory/KVJI.html">Abingdon VA</a></td><td class="obtab">06:35</td><td class="obtableft">Overcast</td><td class="obtab">4</td><td class="obtab">39</td><td class="obtab">39</td><td class="obtab">98</td><td class="obtabrght">CALM</td><td class="obtab">-</td><td class="obtab">30.09</td></tr>
+<tr class="color"><td class="obtableft"><a href="http://w1.weather.gov/data/obhistory/K1A6.html">Middlesboro KY</a></td><td class="obtab">06:35</td><td class="obtableft">Overcast</td><td class="obtab">10</td><td class="obtab">43</td><td class="obtab">42</td><td class="obtab">95</td><td class="obtabrght">SE 3</td><td class="obtab">-</td><td class="obtab">30.09</td></tr>
+<tr class="wht"><td class="obtableft"><a href="http://w1.weather.gov/data/obhistory/KTYS.html">Knoxville TN</a></td><td class="obtab">06:53</td><td class="obtableft">Overcast</td><td class="obtab">2</td><td class="obtab">41</td><td class="obtab">40</td><td class="obtab">95</td><td class="obtabrght">ENE 5</td><td class="obtab">37 [WC]</td><td class="obtab">0.020</td></tr>
+<tr class="color"><td class="obtableft"><a href="http://w1.weather.gov/data/obhistory/KRHP.html">Andrews-Murphy NC</a></td><td class="obtab">06:35</td><td class="obtableft">Overcast</td><td class="obtab">4</td><td class="obtab">40</td><td class="obtab">40</td><td class="obtab">100</td><td class="obtabrght">CALM</td><td class="obtab">-</td><td class="obtab">30.09</td></tr>
+<tr class="wht"><td class="obtableft"><a href="http://w1.weather.gov/data/obhistory/KDNN.html">Dalton GA</a></td><td class="obtab">06:35</td><td class="obtableft">Overcast</td><td class="obtab">5</td><td class="obtab">44</td><td class="obtab">44</td><td class="obtab">100</td><td class="obtabrght">CALM</td><td class="obtab">-</td><td class="obtab">30.06</td></tr>
+<tr class="color"><td class="obtableft"><a href="http://w1.weather.gov/data/obhistory/KTRI.html">Tri-Cities TN</a></td><td class="obtab">06:53</td><td class="obtableft">Overcast</td><td class="obtab">2</td><td class="obtab">39</td><td class="obtab">38</td><td class="obtab">95</td><td class="obtabrght">CALM</td><td class="obtab">-</td><td class="obtab">0.020</td></tr>
+<tr class="wht"><td class="obtableft"><a href="http://w1.weather.gov/data/obhistory/KJFZ.html">Tazewell Cnty VA</a></td><td class="obtab">06:35</td><td class="obtableft">Overcast</td><td class="obtab">1/2</td><td class="obtab">39</td><td class="obtab">39</td><td class="obtab">100</td><td class="obtabrght">CALM</td><td class="obtab">-</td><td class="obtab">30.07</td></tr>
+<tr class="color"><td class="obtableft"><a href="http://w1.weather.gov/data/obhistory/KCSV.html">Crossville TN</a></td><td class="obtab">06:53</td><td class="obtableft">Overcast</td><td class="obtab">4</td><td class="obtab">41</td><td class="obtab">40</td><td class="obtab">95</td><td class="obtabrght">SE 3</td><td class="obtab">-</td><td class="obtab">0.020</td></tr>
+<tr class="wht"><td class="obtableft"><a href="http://w1.weather.gov/data/obhistory/KCHA.html">Chattanooga TN</a></td><td class="obtab">06:53</td><td class="obtableft">Overcast</td><td class="obtab">1 1/2</td><td class="obtab">43</td><td class="obtab">41</td><td class="obtab">92</td><td class="obtabrght">NE 3</td><td class="obtab">-</td><td class="obtab">0.010</td></tr>
+<tr class="color"><td class="obtableft"><a href="http://w1.weather.gov/data/obhistory/KOQT.html">Oak Ridge TN</a></td><td class="obtab">06:53</td><td class="obtableft">Overcast</td><td class="obtab">2 1/2</td><td class="obtab">42</td><td class="obtab">41</td><td class="obtab">95</td><td class="obtabrght">CALM</td><td class="obtab">-</td><td class="obtab">0.020</td></tr>
+<tr class="wht"><td class="obtableft"><a href="http://w1.weather.gov/data/obhistory/KEKQ.html">Wayne Cnty KY</a></td><td class="obtab">06:56</td><td class="obtableft">Overcast</td><td class="obtab">10</td><td class="obtab">44</td><td class="obtab">42</td><td class="obtab">92</td><td class="obtabrght">NA</td><td class="obtab">-</td><td class="obtab">0.030</td></tr>
+<tr class="color"><td class="obtableft"><a href="http://w1.weather.gov/data/obhistory/KMOR.html">Morristown TN</a></td><td class="obtab">06:35</td><td class="obtableft">Overcast</td><td class="obtab">2</td><td class="obtab">39</td><td class="obtab">39</td><td class="obtab">100</td><td class="obtabrght">CALM</td><td class="obtab">-</td><td class="obtab">30.08</td></tr>
+<tr class="wht"><td class="obtableft"><a href="http://w1.weather.gov/data/obhistory/KLNP.html">Wise VA</a></td><td class="obtab">06:35</td><td class="obtableft">Overcast</td><td class="obtab">7</td><td class="obtab">41</td><td class="obtab">41</td><td class="obtab">100</td><td class="obtabrght">SW 7</td><td class="obtab">36 [WC]</td><td class="obtab">30.07</td></tr>
 </table></td></tr></table></td></tr></table></div>

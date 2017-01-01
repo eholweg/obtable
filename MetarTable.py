@@ -34,21 +34,22 @@ localTZ = getlocaltimezone(datetime.datetime.utcnow())
 obtable = '<div class="boxit">' + "\n"
 obtable += '<style type="text/css">' + "\n"
 obtable += '<!--' + "\n"
-obtable += '.obtab { font-size: 90%; font-family: Arial,Helvetica,san-serif; text-align:center; }' + "\n"
-obtable += '.obtableft { font-size: 90%; text-align:left; font-family: Arial,Helvetica,san-serif; }' + "\n"
+obtable += '.obtab { font-size: 90%; font-family: Arial,Helvetica,san-serif; text-align:center; padding:3px; }' + "\n"
+obtable += '.obtableft { font-size: 90%; text-align:left; font-family: Arial,Helvetica,san-serif; padding-left:6px; }' + "\n"
+obtable += '.obtabrght { font-size: 90%; text-align:right; font-family: Arial,Helvetica,san-serif; padding-right:6px; }' + "\n"
 obtable += '.wht { background-color:#FFF; text-align:center; }' + "\n"
 obtable += '.color { background-color:#EEE; text-align:center; }' + "\n"
 obtable += '.tabbg { background-color: #0071bc; font-size: 120%; }' + "\n"
-obtable += '.tabhdr { color: #FFFFFF; font-weight: bold; font-family: Arial,Helvetica,san-serif; }' + "\n"
+obtable += '.tabhdr { color: #FFFFFF; font-weight: bold; font-family: Arial,Helvetica,san-serif; padding: 8px; }' + "\n"
 obtable += '-->' + "\n"
 obtable += '</style>' + "\n"
 
 obtable += '<table border="0" cellpadding="0" cellspacing="0" width="100%">' + "\n"
-obtable += '<tr><td bgcolor="#0071bc"><span class="tabhdr">&nbsp;Current Weather Observations... </span></td></tr>' + "\n"
+obtable += '<tr><td bgcolor="#0071bc"><div class="title">&nbsp;Current Weather Observations... </div></td></tr>' + "\n"
 obtable += '<tr><td>' + "\n"
 obtable += '<table border="0" cellpadding="0" cellspacing="0" width="100%">' + "\n"
 obtable += '<tr><td bgcolor="#202CB8">' + "\n"
-obtable += '<table cellspacing="1" cellpadding="4" border="0" width="100%">' + "\n"
+obtable += '<table cellspacing="0" cellpadding="4" border="1" width="100%">' + "\n"
 obtable += '<tr bgcolor="#fff2d9">' + "\n"
 obtable += '<td class="obtab">Location</td>' + "\n"
 obtable += '<td class="obtab">Time<br>(' + localTZ + ')</td>' + "\n"
@@ -158,7 +159,10 @@ for id, name in sites.items():
 
         matchpre = re.match(prePat, line)
         if matchpre:
-            pres = matchpre.group(1).strip()
+            pval=matchpre.group(1).strip()
+            if len(pval)<5:
+                pval=pval+"0"
+            pres = pval
 
     if (row % 2 == 0):
         obtable += '<tr class="wht">'
@@ -180,7 +184,7 @@ for id, name in sites.items():
     elif appTVal<45 and windSpeed>4:
         wcHI=str(appTVal) + " [WC]"
     else:
-        wcHI="na"
+        wcHI="-"
 
     row += 1
     obtable += '<td class="obtableft"><a href="' + href + '">' + name + '</a></td>'
@@ -190,7 +194,7 @@ for id, name in sites.items():
     obtable += '<td class="obtab">' + temp + '</td>'
     obtable += '<td class="obtab">' + dew + '</td>'
     obtable += '<td class="obtab">' + rh + '</td>'
-    obtable += '<td class="obtableft">' + wind + '</td>'
+    obtable += '<td class="obtabrght">' + wind + '</td>'
     obtable += '<td class="obtab">' + wcHI + '</td>'
     obtable += '<td class="obtab">' + pres + '</td>'
     obtable += '</tr>' + "\n"
