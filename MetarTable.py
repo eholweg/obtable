@@ -8,6 +8,7 @@ dtgPat = '\w\w\w\s\d{1,2},\s\d\d\d\d\s-\s(.*)\w\w\w\s/\s.*'
 wndPat = 'Wind:(.*):.*'
 visPat = 'Vis.*:(.*)\sm.*:.*'
 skyPat = 'Sky.*:(.*)'
+wxPat = 'Weather.*:(.*)'
 tmpPat = 'Temp.*:(.*)F.*'
 dewPat = 'Dew.*:(.*)F.*'
 humPat = 'Relative.*:(.*)%'
@@ -73,7 +74,7 @@ sites = dict([('KVJI', 'Abingdon VA'),
               ('KTRI', 'Tri-Cities TN'),
               ('KEKQ', 'Wayne Cnty KY'),
               ('KLNP', 'Wise VA'),
-              #('KFAR', 'Fargo ND'),
+              ('KLWV', 'Test Site ND'),
               ])
 row = 0
 # CAN USE stations IN PLACE OF decoded IF YOU WANT TO GET JUST THE RAW OBSERVATION
@@ -87,6 +88,8 @@ for id, name in sites.items():
     observation = observation.split("\n")
 
     href = obHistory + id + '.html'
+
+    tableWx=''
 
     for line in observation:
         matchdtg = re.match(dtgPat, line)
@@ -138,6 +141,11 @@ for id, name in sites.items():
         if matchvis:
             vsby = matchvis.group(1).strip()
 
+        matchwx = re.match(wxPat, line)
+        if matchwx:
+            wx = matchwx.group(1).strip().title()
+            print(wx)
+
         matchsky = re.match(skyPat, line)
         if matchsky:
             sky = matchsky.group(1).strip().title()
@@ -166,6 +174,12 @@ for id, name in sites.items():
                 pval=pval+"0"
             pres = pval
 
+
+    try:
+        tableWx=wx
+    except NameError:
+        tableWx=sky
+
     if (row % 2 == 0):
         obtable += '<tr class="wht">'
     else:
@@ -191,7 +205,7 @@ for id, name in sites.items():
     row += 1
     obtable += '<td class="obtableft"><a href="' + href + '">' + name + '</a></td>'
     obtable += '<td class="obtab">' + eventTime + '</td>'
-    obtable += '<td class="obtableft">' + sky + '</td>'
+    obtable += '<td class="obtableft">' + tableWx + '</td>'
     obtable += '<td class="obtab">' + vsby + '</td>'
     obtable += '<td class="obtab">' + temp + '</td>'
     obtable += '<td class="obtab">' + dew + '</td>'
