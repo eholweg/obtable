@@ -2,6 +2,7 @@ import urllib
 import re
 import pytz
 import datetime
+from collections import OrderedDict
 from AppT import *
 
 dtgPat = '\w\w\w\s\d{1,2},\s\d\d\d\d\s-\s(.*)\w\w\w\s/\s.*'
@@ -61,7 +62,7 @@ obtable += '<td class="obtab">Dewpt.<br>(&ordm;F)</td>' + "\n"
 obtable += '<td class="obtab">Hum.<br>(%)</td>' + "\n"
 obtable += '<td class="obtab">Wind<br>(mph)</td><td class="obtab">Wind Chill / Heat Index<br>(&ordm;F)</td><td class="obtab">Pres.<br>(in)</td></tr>' + "\n"
 
-sites = dict([('KVJI', 'Abingdon VA'),
+sites = OrderedDict([('KVJI', 'Abingdon VA'),
               ('KRHP', 'Andrews-Murphy NC'),
               ('KCHA', 'Chattanooga TN'),
               ('KCSV', 'Crossville TN'),
@@ -74,8 +75,9 @@ sites = dict([('KVJI', 'Abingdon VA'),
               ('KTRI', 'Tri-Cities TN'),
               ('KEKQ', 'Wayne Cnty KY'),
               ('KLNP', 'Wise VA'),
-              ('KLWV', 'Test Site ND'),
+              #('KDKK', 'Test Site ND'),
               ])
+
 row = 0
 # CAN USE stations IN PLACE OF decoded IF YOU WANT TO GET JUST THE RAW OBSERVATION
 obLink = 'http://tgftp.nws.noaa.gov/data/observations/metar/decoded/'
@@ -109,7 +111,7 @@ for id, name in sites.items():
                 wind = "CALM"
                 wndSpd = 0
             elif wind == 'Vrbl':
-                print("Going into wind var")
+                #print("Going into wind var")
                 wndVarPat = 'Variable\sat\s(\d+).*'
                 matchVarWnd = re.match(wndVarPat, wind)
                 if matchVarWnd:
@@ -144,7 +146,8 @@ for id, name in sites.items():
         matchwx = re.match(wxPat, line)
         if matchwx:
             wx = matchwx.group(1).strip().title()
-            print(wx)
+            wx = wx.replace("; ", "&nbsp;&bsol;&nbsp;")
+            #print(wx)
 
         matchsky = re.match(skyPat, line)
         if matchsky:
@@ -177,8 +180,10 @@ for id, name in sites.items():
 
     try:
         tableWx=wx
+        del wx
     except NameError:
         tableWx=sky
+        del sky
 
     if (row % 2 == 0):
         obtable += '<tr class="wht">'
