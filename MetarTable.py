@@ -75,7 +75,8 @@ sites = OrderedDict([('KVJI', 'Abingdon VA'),
               ('KTRI', 'Tri-Cities TN'),
               ('KEKQ', 'Wayne Cnty KY'),
               ('KLNP', 'Wise VA'),
-              #('KDKK', 'Test Site ND'),
+              #('KMFR', 'Test Site ND'),
+              #('KCDR', 'Test New Site ND'),
               ])
 
 row = 0
@@ -107,15 +108,15 @@ for id, name in sites.items():
             wndSpd = '0'
             # Have root wind... now need to break it out and format
             # Calm will not need to be further extracted
-            if wind == 'Calm':
+            if wind.startswith('Calm'):
                 wind = "CALM"
                 wndSpd = 0
-            elif wind == 'Vrbl':
+            elif wind.startswith('Variable'):
                 #print("Going into wind var")
                 wndVarPat = 'Variable\sat\s(\d+).*'
                 matchVarWnd = re.match(wndVarPat, wind)
                 if matchVarWnd:
-                    wind = 'Vrbl ' + matchVarWnd.group(1)
+                    wind = 'VRB ' + matchVarWnd.group(1)
                     wndSpd = matchVarWnd.group(1)
                 else:
                     wnd = 'NA'
@@ -173,10 +174,11 @@ for id, name in sites.items():
             #print(line)
             pval=matchpre.group(1).strip()
             #print(pval)
-            if len(pval)<5:
-                pval=pval+"0"
+            if len(pval) < 3:
+                pval = pval + ".00"
+            elif len(pval) < 5:
+                pval = pval + "0"
             pres = pval
-
 
     try:
         tableWx=wx
