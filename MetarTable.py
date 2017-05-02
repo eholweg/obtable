@@ -277,7 +277,7 @@ for id, name in sites.items():
     obtable += '<td class="obtab">' + pres + '</td>'
     obtable += '</tr>' + "\n"
 
-    #Now see which table to include the observation in
+    #Now see which table to include the observation
     obtablefull+=obtable
     if ( frontSiteTable[id] ):
         obtablefront+=obtable
