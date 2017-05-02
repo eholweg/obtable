@@ -244,6 +244,6 @@ obtable += '</div>'
 # OUTPUT THE OB TABLE TO FILE
 # print obtable
 
-html = open('./obstable.html', 'w')
+html = open('./fullobstable.html', 'w')
 html.write(obtable)
 html.close()
