@@ -64,17 +64,26 @@ obtable += '<td class="obtab">Wind<br>(mph)</td><td class="obtab">Wind Chill / H
 
 sites = OrderedDict([('KVJI', 'Abingdon VA'),
               ('KRHP', 'Andrews-Murphy NC'),
+              ('KMMI', 'Athens TN'),
               ('KCHA', 'Chattanooga TN'),
+              ('KRZR', 'Cleveland TN'),
               ('KCSV', 'Crossville TN'),
               ('KDNN', 'Dalton GA'),
-              ('KTYS', 'Knoxville TN'),
+              ('K0A9', 'Elizabethton TN'),
+              ('KGKT', 'Gatlinburg-Pigeon Forge TN'),
+              ('KJAU', 'Jacksboro TN'),
+              ('KTYS', 'Knoxville TN (McGhee-Tyson)'),
+              ('KDKX', 'Knoxville TN (Downtown)'),
+              ('K0VG', 'Lee County VA'),
               ('K1A6', 'Middlesboro KY'),
               ('KMOR', 'Morristown TN'),
               ('KOQT', 'Oak Ridge TN'),
               ('KJFZ', 'Tazewell Cnty VA'),
               ('KTRI', 'Tri-Cities TN'),
               ('KEKQ', 'Wayne Cnty KY'),
+              ('KBYL', 'Whitley County KY'),
               ('KLNP', 'Wise VA'),
+              #('K', ''),
               #('KMFR', 'Test Site ND'),
               #('KCDR', 'Test New Site ND'),
               ])
@@ -82,15 +91,16 @@ sites = OrderedDict([('KVJI', 'Abingdon VA'),
 row = 0
 # CAN USE stations IN PLACE OF decoded IF YOU WANT TO GET JUST THE RAW OBSERVATION
 obLink = 'http://tgftp.nws.noaa.gov/data/observations/metar/decoded/'
-obHistory='http://w1.weather.gov/data/obhistory/'
+obHistory='http://www.wrh.noaa.gov/zoa/getobext.php?sid='
 
 for id, name in sites.items():
+    print id
     # CAN USE stations IN PLACE OF decoded IF YOU WANT TO GET JUST THE RAW OBSERVATION
     link = obLink + id + ".TXT"
     observation = urllib.urlopen(link).read(10000)
     observation = observation.split("\n")
 
-    href = obHistory + id + '.html'
+    href = obHistory + id
 
     tableWx=''
 
@@ -184,8 +194,11 @@ for id, name in sites.items():
         tableWx=wx
         del wx
     except NameError:
-        tableWx=sky
-        del sky
+        try:
+            tableWx=sky
+            del sky
+        except NameError:
+            tableWx=''
 
     if (row % 2 == 0):
         obtable += '<tr class="wht">'
