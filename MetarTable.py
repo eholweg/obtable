@@ -45,10 +45,14 @@ obtable += '.tabbg { background-color: #0071bc; font-size: 120%; }' + "\n"
 obtable += '.tabhdr { color: #FFFFFF; font-weight: bold; font-family: Arial,Helvetica,san-serif; padding: 8px; }' + "\n"
 obtable += '-->' + "\n"
 obtable += '</style>' + "\n"
-
 obtable += '<table border="0" cellpadding="0" cellspacing="0" width="100%">' + "\n"
-obtable += '<tr><td bgcolor="#0071bc"><div class="title">&nbsp;Current Weather Observations... </div></td></tr>' + "\n"
-obtable += '<tr><td>' + "\n"
+
+obtablefull=obtable;
+obtablefront=obtable;
+
+obtablefront += '<tr><td bgcolor="#0071bc"><div class="title">&nbsp;Current Weather Observations... </div></td></tr>' + "\n"
+
+obtable = '<tr><td>' + "\n"
 obtable += '<table border="0" cellpadding="0" cellspacing="0" width="100%">' + "\n"
 obtable += '<tr><td bgcolor="#202CB8">' + "\n"
 obtable += '<table cellspacing="0" cellpadding="4" border="1" width="100%">' + "\n"
@@ -62,6 +66,11 @@ obtable += '<td class="obtab">Dewpt.<br>(&ordm;F)</td>' + "\n"
 obtable += '<td class="obtab">Hum.<br>(%)</td>' + "\n"
 obtable += '<td class="obtab">Wind<br>(mph)</td><td class="obtab">Wind Chill / Heat Index<br>(&ordm;F)</td><td class="obtab">Pres.<br>(in)</td></tr>' + "\n"
 
+obtablefull+=obtable
+obtablefront+=obtable
+
+obtable=''
+
 sites = OrderedDict([('KVJI', 'Abingdon VA'),
               ('KRHP', 'Andrews-Murphy NC'),
               ('KMMI', 'Athens TN'),
@@ -74,27 +83,50 @@ sites = OrderedDict([('KVJI', 'Abingdon VA'),
               ('KJAU', 'Jacksboro TN'),
               ('KTYS', 'Knoxville TN (McGhee-Tyson)'),
               ('KDKX', 'Knoxville TN (Downtown)'),
-              ('K0VG', 'Lee County VA'),
+              ('K0VG', 'Lee Cnty VA'),
               ('K1A6', 'Middlesboro KY'),
               ('KMOR', 'Morristown TN'),
               ('KOQT', 'Oak Ridge TN'),
               ('KJFZ', 'Tazewell Cnty VA'),
               ('KTRI', 'Tri-Cities TN'),
               ('KEKQ', 'Wayne Cnty KY'),
-              ('KBYL', 'Whitley County KY'),
+              ('KBYL', 'Whitley Cnty KY'),
               ('KLNP', 'Wise VA'),
               #('K', ''),
               #('KMFR', 'Test Site ND'),
               #('KCDR', 'Test New Site ND'),
               ])
 
-row = 0
+frontSiteTable={
+    'KVJI': True,
+    'KRHP': True,
+    'KMMI': False,
+    'KCHA': True,
+    'KRZR': False,
+    'KCSV': True,
+    'KDNN': True,
+    'K0A9': False,
+    'KGKT': False,
+    'KJAU': False,
+    'KTYS': True,
+    'KDKX': False,
+    'K0VG': False,
+    'K1A6': True,
+    'KMOR': True,
+    'KOQT': True,
+    'KJFZ': True,
+    'KTRI': True,
+    'KEKQ': False,
+    'KBYL': False,
+    'KLNP': True,
+}
+
+rowFull = rowFront = 0
 # CAN USE stations IN PLACE OF decoded IF YOU WANT TO GET JUST THE RAW OBSERVATION
 obLink = 'http://tgftp.nws.noaa.gov/data/observations/metar/decoded/'
 obHistory='http://www.wrh.noaa.gov/zoa/getobext.php?sid='
 
 for id, name in sites.items():
-    print id
     # CAN USE stations IN PLACE OF decoded IF YOU WANT TO GET JUST THE RAW OBSERVATION
     link = obLink + id + ".TXT"
     observation = urllib.urlopen(link).read(10000)
@@ -200,10 +232,17 @@ for id, name in sites.items():
         except NameError:
             tableWx=''
 
-    if (row % 2 == 0):
-        obtable += '<tr class="wht">'
+    #NOW PIECE TOGETHER TABLE
+    if (frontSiteTable[id]):
+        if (rowFront % 2 == 0):
+            obtablefront += '<tr class="wht">'
+        else:
+            obtablefront += '<tr class="color">'
+
+    if (rowFull % 2 == 0):
+        obtablefull += '<tr class="wht">'
     else:
-        obtable += '<tr class="color">'
+        obtablefull += '<tr class="color">'
 
     #Calculate Wind Chill or Heat Index
     W=array([int(windSpeed)])
@@ -222,7 +261,10 @@ for id, name in sites.items():
     else:
         wcHI="-"
 
-    row += 1
+    if (frontSiteTable[id]):
+        rowFront += 1
+    rowFull += 1
+
     obtable += '<td class="obtableft"><a href="' + href + '">' + name + '</a></td>'
     obtable += '<td class="obtab">' + eventTime + '</td>'
     obtable += '<td class="obtableft">' + tableWx + '</td>'
@@ -235,15 +277,26 @@ for id, name in sites.items():
     obtable += '<td class="obtab">' + pres + '</td>'
     obtable += '</tr>' + "\n"
 
+    #Now see which table to include the observation in
+    obtablefull+=obtable
+    if ( frontSiteTable[id] ):
+        obtablefront+=obtable
+    obtable=''
+
 # Finalize The Ob Table
-obtable += '</table>'
+obtable = '</table>'
 obtable += '</td></tr></table>'
 obtable += '</td></tr></table>'
 obtable += '</div>'
 
-# OUTPUT THE OB TABLE TO FILE
-# print obtable
+obtablefull+=obtable
+obtablefront+=obtable
 
+# OUTPUT THE OB TABLES TO FILE
 html = open('./fullobstable.html', 'w')
-html.write(obtable)
+html.write(obtablefull)
+html.close()
+
+html = open('./obstable.html', 'w')
+html.write(obtablefront)
 html.close()
